@@ -4,15 +4,15 @@
 
 ## Mission
 
-Our purpose is to accelerate the deployment of industrial automation scenarios by building intelligent agents that learn from real-world operations and use simulation to improve automation.
+We accelerate the deployment of industrial automation scenarios by building intelligent agents that learn from real-world operations and use simulation to improve automation.
 
-## Product concept
+## Product definition
 
-The intelligent bot is the core product. Simulation is the foundation the bot uses to understand automation systems, explore future scenarios, and validate improvement ideas.
+The intelligent agent is the core product. Simulation is the agent's modeling and experimentation foundation. The agent connects real operations to a virtual model, uses that model to evaluate future scenarios, and applies validated results to improve automation.
 
-The bot's defining capability is learning how real operations correspond to their simulated models. It observes equipment, processes, events, and constraints; builds and updates a scenario model; tests possible futures in simulation; and uses the difference between predicted and observed results to improve its models and strategies. Validated improvements can then be brought back to real operations through a controlled process.
+The agent observes equipment, process flows, events, and operating constraints. It maps these observations to the simulation model, calibrates the model against real data, tests future scenarios, and compares simulated outcomes with actual results. It uses the measured differences to improve the model and its operating strategies.
 
-The simulation does not need to be a detailed 3D replica. It needs to describe the parts of reality that matter to a scenario well enough to predict behavior and compare decisions.
+Each simulation model represents the equipment states, process flows, relationships, constraints, and failure behavior required by its target scenario. Model validity is measured by how accurately it reproduces relevant real behavior and predicts scenario outcomes. Three-dimensional visualization is one way to present a model; it is not the model itself.
 
 ## System architecture
 
@@ -31,31 +31,36 @@ flowchart LR
     P -->|controlled execution| C
 ```
 
-The feedback loop is:
+The operating loop is:
 
-**Observe reality → map it into a scenario model → simulate future cases → compare predictions with outcomes → improve the model and agent → apply validated improvements to real operations.**
+**Observe real operations → map them into the world model → simulate future scenarios → compare predictions with actual results → improve the model and agent → release validated improvements through the agent platform.**
 
-## Planned engineering projects
+## Engineering projects
 
-These are proposed project boundaries. The connector layer is the first defined project; the other boundaries can evolve as implementation needs become clearer.
+The engineering program consists of six projects with defined responsibilities:
 
 | Project | Responsibility |
 | --- | --- |
-| `industrial-automation-connectors` | Connect to PLC, MES, SCADA, robot, and other automation systems. Normalize telemetry, events, and available actions for upper layers. This layer does not own agent reasoning, runtime, or permissions. |
-| `industrial-world-model` | Represent equipment, processes, states, relationships, and constraints in a versioned scenario model that can be calibrated against real operations. |
-| `simulation-adapters` | Connect scenario models to simulation engines and provide a consistent way to define and run future scenarios. The initial approach can integrate existing engines. |
-| `automation-agent` | Provide the core intelligence: understand a scenario, learn the mapping between reality and simulation, plan tasks, interpret simulation results, and improve strategies. |
-| `automation-agent-platform` | Host and coordinate agents, tools, and workflows. Own runtime, permissions, execution controls, and audit records. |
-| `scenario-evaluation` | Compare simulated predictions with real outcomes; manage test scenarios, metrics, regression checks, and model or agent evaluations. |
+| `industrial-automation-connectors` | Connect PLC, MES, SCADA, robots, and other automation systems. Normalize telemetry, events, and available actions for upper layers. This project does not own agent reasoning, runtime, or permissions. |
+| `industrial-world-model` | Define and maintain the shared model of equipment, processes, states, relationships, and constraints. Calibrate scenario models against real operating data. |
+| `simulation-adapters` | Connect world models to simulation engines through consistent interfaces for building and running future scenarios. |
+| `automation-agent` | Implement the core intelligence: understand scenarios, learn the mapping between real operations and simulation, plan tasks, interpret simulation results, and improve strategies. |
+| `automation-agent-platform` | Run and coordinate agents, tools, and workflows. Manage runtime, permissions, execution controls, and audit records. |
+| `scenario-evaluation` | Compare simulated predictions with real outcomes. Maintain test scenarios, metrics, regression checks, and evaluations of models and agents. |
 
-## Design principles
+## Design commitments
 
-- **Reality first:** model the operational details that affect the target scenario, including constraints and failure cases.
-- **Calibrated simulation:** update models from real data and track model versions, evidence, and uncertainty.
-- **Future-oriented:** use the model to test alternative conditions and plans before changing real operations.
-- **Measured learning:** evaluate agent and model changes against recorded scenarios and observed outcomes.
-- **Controlled execution:** the agent platform governs permissions and the path from a validated simulation result to real-world action.
+- **Reality-to-simulation mapping:** represent the real equipment, processes, constraints, and behaviors that determine each target scenario.
+- **Measured model calibration:** validate simulation outputs against real operating data and outcomes; record model versions and supporting evidence.
+- **Future scenario testing:** evaluate alternative conditions and plans in simulation before releasing changes to real operations.
+- **Evidence-based improvement:** use measured prediction errors and scenario results to update the model and agent.
+- **Controlled execution:** route every real-world action through the agent platform's permissions, execution controls, and audit records.
 
-## Initial development loop
+## Implementation sequence
 
-Start with one bounded automation scenario and one supported system integration. Capture its observable state and actions, build a useful scenario model, run future cases in simulation, compare predictions with observed results, and improve the mapping. Expand to additional equipment and scenarios as the loop proves reliable.
+1. Connect one automation system through `industrial-automation-connectors` and normalize its states, events, and available operations.
+2. Build an `industrial-world-model` for one representative automation scenario, including its operating states, constraints, and process behavior.
+3. Connect the model to a simulation engine through `simulation-adapters` and run defined future scenarios.
+4. Implement the agent's reality-to-simulation mapping and compare its predictions with actual operating results.
+5. Use evaluation results to calibrate the model and improve the agent; release validated changes through `automation-agent-platform`.
+6. Extend the same interfaces and evaluation process to additional systems and scenarios.
