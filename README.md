@@ -22,7 +22,7 @@ flowchart LR
     C --> W[Industrial world model]
     C --> P[Agent platform]
     P --> A[Intelligent automation agent]
-    W --> S[Simulation adapters and engines]
+    W --> S[Simulation platform with selected engine]
     A -->|scenarios and plans| S
     S --> E[Scenario evaluation]
     E --> A
@@ -43,7 +43,7 @@ The engineering program consists of six projects with defined responsibilities:
 | --- | --- |
 | `industrial-automation-connectors` | Connect PLC, MES, SCADA, robots, and other automation systems. Normalize telemetry, events, and available actions for upper layers. This project does not own agent reasoning, runtime, or permissions. |
 | `industrial-world-model` | Define and maintain the shared model of equipment, processes, states, relationships, and constraints. Calibrate scenario models against real operating data. |
-| `simulation-adapters` | Connect world models to simulation engines through consistent interfaces for building and running future scenarios. |
+| `simulation-platform` | Design the simulation solution for each pilot, integrate a selected simulation engine, and build and run future scenarios. The engine is not yet selected; adapters are one implementation component of the platform. |
 | `automation-agent` | Implement the core intelligence: understand scenarios, learn the mapping between real operations and simulation, plan tasks, interpret simulation results, and improve strategies. |
 | `automation-agent-platform` | Run and coordinate agents, tools, and workflows. Manage runtime, permissions, execution controls, and audit records. |
 | `scenario-evaluation` | Compare simulated predictions with real outcomes. Maintain test scenarios, metrics, regression checks, and evaluations of models and agents. |
@@ -60,7 +60,7 @@ The engineering program consists of six projects with defined responsibilities:
 
 1. Connect one automation system through `industrial-automation-connectors` and normalize its states, events, and available operations.
 2. Build an `industrial-world-model` for one representative automation scenario, including its operating states, constraints, and process behavior.
-3. Connect the model to a simulation engine through `simulation-adapters` and run defined future scenarios.
+3. Design the simulation solution, select a pilot engine, and use `simulation-platform` to connect the model and run defined future scenarios.
 4. Implement the agent's reality-to-simulation mapping and compare its predictions with actual operating results.
 5. Use evaluation results to calibrate the model and improve the agent; release validated changes through `automation-agent-platform`.
 6. Extend the same interfaces and evaluation process to additional systems and scenarios.
