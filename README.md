@@ -22,6 +22,7 @@ flowchart LR
     C --> W[Industrial world model]
     C --> P[Agent platform]
     P --> A[Intelligent automation agent]
+    W -->|scenario model and state| A
     W --> S[Simulation platform with selected engine]
     A -->|scenarios and plans| S
     S --> E[Scenario evaluation]
@@ -42,9 +43,9 @@ The engineering program consists of six projects with defined responsibilities:
 | Project | Responsibility |
 | --- | --- |
 | `industrial-automation-connectors` | Connect PLC, MES, SCADA, robots, and other automation systems. Normalize telemetry, events, and available actions for upper layers. This project does not own agent reasoning, runtime, or permissions. |
-| `industrial-world-model` | Define and maintain the shared model of equipment, processes, states, relationships, and constraints. Calibrate scenario models against real operating data. |
+| `industrial-world-model` | Define and maintain the shared model of equipment, processes, states, relationships, and constraints. Calibrate scenario models against real operating data, and expose them to agents and the simulation platform through a stable interface. |
 | `simulation-platform` | Design the simulation solution for each pilot, integrate a selected simulation engine, and build and run future scenarios. The engine is not yet selected; adapters are one implementation component of the platform. |
-| `automation-agent` | Implement the core intelligence: understand scenarios, learn the mapping between real operations and simulation, plan tasks, interpret simulation results, and improve strategies. |
+| `automation-agent` | Read scenario states, relationships, and constraints through the world-model interface. Implement the core intelligence: understand scenarios, learn the mapping between real operations and simulation, plan tasks, interpret simulation results, and improve strategies. |
 | `automation-agent-platform` | Run and coordinate agents, tools, and workflows. Manage runtime, permissions, execution controls, and audit records. |
 | `scenario-evaluation` | Compare simulated predictions with real outcomes. Maintain test scenarios, metrics, regression checks, and evaluations of models and agents. |
 
