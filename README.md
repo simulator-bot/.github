@@ -10,9 +10,9 @@ We accelerate the deployment of industrial automation scenarios by building inte
 
 The intelligent agent is the core product. Simulation is the agent's modeling and experimentation foundation. The agent connects real operations to a virtual model, uses that model to evaluate future scenarios, and applies validated results to improve automation.
 
-The agent observes equipment, process flows, events, and operating constraints. It maps these observations to the simulation model, calibrates the model against real data, tests future scenarios, and compares simulated outcomes with actual results. It uses the measured differences to improve the model and its operating strategies.
+Connectors collect observations. The industrial world model binds them to equipment actions and material flows, reconstructs operating state, and calibrates behavior against production records. The agent reads this shared model to investigate a question and propose changes. The simulation platform runs the scenarios, and scenario evaluation compares predictions with actual outcomes. The agent uses that evidence to explain results and propose improvements.
 
-Each simulation model represents the equipment states, process flows, relationships, constraints, and failure behavior required by its target scenario. Model validity is measured by how accurately it reproduces relevant real behavior and predicts scenario outcomes. Three-dimensional visualization is one way to present a model; it is not the model itself.
+The same model can describe one machine, a production area, or a plant. Equipment templates define actions and feedback signals. Instances bind those signals to field points. Routes, buffers, handoffs, and shared resources explain how one machine affects another. At plant level, orders and transfers connect production areas. Model validity depends on reproducing observed behavior and predicting outcomes.
 
 ## System architecture
 
@@ -26,6 +26,7 @@ flowchart LR
     W --> S[Simulation platform with selected engine]
     A -->|scenarios and plans| S
     S --> E[Scenario evaluation]
+    W -->|observed production history| E
     E --> A
     E --> W
     A -->|validated actions| P
@@ -60,8 +61,8 @@ The engineering program consists of six projects with defined responsibilities:
 ## Implementation sequence
 
 1. Connect one automation system through `industrial-automation-connectors` and normalize its states, events, and available operations.
-2. Build an `industrial-world-model` for one representative automation scenario, including its operating states, constraints, and process behavior.
+2. Replay a real shift segment covering two adjacent machines and one handoff. Deliver a traceable workpiece history and a versioned snapshot of equipment state, work in progress, resource occupancy, and unknowns at the handoff.
 3. Design the simulation solution, select a pilot engine, and use `simulation-platform` to connect the model and run defined future scenarios.
-4. Implement the agent's reality-to-simulation mapping and compare its predictions with actual operating results.
+4. Let the agent propose a scenario and interpret the comparison that scenario evaluation produces from simulation results and actual production records.
 5. Use evaluation results to calibrate the model and improve the agent; release validated changes through `automation-agent-platform`.
 6. Extend the same interfaces and evaluation process to additional systems and scenarios.
